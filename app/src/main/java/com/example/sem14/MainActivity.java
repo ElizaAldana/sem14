@@ -9,9 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.UUID;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private FirebaseDatabase db;
     private Button loginBtn;
@@ -27,25 +30,20 @@ public class MainActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         userInp = findViewById(R.id.userInp);
 
-        loginBtn.setOnClickListener(
-                (v) ->{
-                    String user = userInp.getText().toString();
-                    userEmpty = user.isEmpty();
-                    if (userEmpty){
-                        Toast.makeText(this, "Don't forget to write your username", Toast.LENGTH_SHORT).show();
-                    }else{
-                        //Si no ps cambia de pantalla
-                        Intent i = new Intent(this, SecondActivity.class);
-                        startActivity(i);
-                    }
-                }
-        );
     }
 
-    /*public void onClick(View v) {
+
+    @Override
+    public void onClick(View v) {
         switch (v.getId()){
             case R.id.loginBtn:
-
+                String username = UUID.randomUUID().toString();
+                DatabaseReference reference = db.getReference().child("User").child("Username").child(username);
+                User user = new User(
+                        username,
+                        userInp.getText().toString()
+                );
+                break;
         }
-    }*/
+    }
 }
